@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        link(rel="stylesheet", href="../public/style.css")
+        link(rel="stylesheet", href="../public/bootstrap.css")
+        
+        title Profile
+    body
+      script(src="../public/jquery.js")
+      script(src="../public/bootstrap.bundle.js")
+      div.profileMain
+        div.nextDiv
+          h1.center.welcomeMessage Welcome #{username} to your Personal Library
+          h3.center.booksMessage#pug-success-message These are your books:
+          p#pug-variable=message
+          div.booksDiv
+            if messages
+              h1 #{messages}
+            if books
+              for book in books 
+                h3 #{book.title} 
+                form(action='/api/delete' method='post')
+                  p Number of Comments: #{book.comments.length}
+                  input(type='text' name='id' value=`${book._id}` hidden)
+                  input(type='text' name='bname' value=`${book.bName}` hidden)
+                  input(id="delete-btn" type='submit', value='✗')         
+
+                div.card
+                  h3.comments Comments 
+                    br
+                    br
+                    form(action='/api/comment' method='post')
+                      input(type='text' name='id' value=`${book._id}` hidden)
+                      label.addComment Add A Comment: 
+                      input(type='text', name='comment', placeholder='Comment' class='newComment')
+                      input(type='text' name='username' value=`${username}` hidden)
+                      div 
+                        input(type='submit', value='Save' class='saveBtn')
+                  if book.comments
+                    for comment in book.comments 
+                      li Comment:
+                        p #{`${comment.comment}`} 
+                        p #{`Submitted by: ${comment.username}`}
+              
+            div#loginForm  
+              h3.loginForm Book Log Form
+              br
+              br
+              form(action='/api/books', method='post')
+                div
+                  label.enterBook Enter A Book:
+                    input(type='text', name='title', placeholder='New Book' class='newBook')
+                    input(type="text", name='author', placeholder='Author' class='newBook')
+                    input(type='text' name='username' value=`${username}` hidden)
+                div
+                  input(type='submit', value='Enter New Book' hidden)
+                  button.newBookBtn Enter Book
+
+
+
+
+
+            form(action='/api/deleteAll' method='post')
+              input(type='text' name='username' value=`${username}` hidden)
+              button.deleteBtn Delete All
+
+            form(action='/api/logout' method='post')
+              button.logoutBtn Logout
+
+            
+          
+            
